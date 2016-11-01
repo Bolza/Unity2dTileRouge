@@ -18,6 +18,7 @@ public abstract class MovingObject : MonoBehaviour {
 	}
 
 	protected IEnumerator SmoothMovement (Vector3 end) {
+
 		// sqrMagnitude is more efficient than Magnitude to calculate the distance
 		float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
 		//float Epsilon is a very small number, almost zero
