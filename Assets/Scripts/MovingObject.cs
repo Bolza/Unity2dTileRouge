@@ -18,14 +18,14 @@ public abstract class MovingObject : MonoBehaviour {
 	}
 
 	protected IEnumerator SmoothMovement (Vector3 end) {
-
 		// sqrMagnitude is more efficient than Magnitude to calculate the distance
 		float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
 		//float Epsilon is a very small number, almost zero
-		while (sqrRemainingDistance < float.Epsilon) {
+		while (sqrRemainingDistance > float.Epsilon) {
 			Vector3 newPos = Vector3.MoveTowards (rb2d.position, end, inverseMoveTime * Time.deltaTime);
 			// XXX any better way to move the object?
-			rb2d.MovePosition (newPos);
+			//rb2d.MovePosition (newPos);
+			transform.position = newPos;
 			// remaining distance
 			sqrRemainingDistance = (transform.position - end).sqrMagnitude;
 			// wait a frame before continuing the loop

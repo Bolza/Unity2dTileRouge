@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MovingObject {
 	public int wallDamage = 1;
 	public int pointsPerFood = 10;
 	public int pointsPerSoda = 20;
 	public float restartLevelDelay = 1f;
+	public Text foodText;
 
 	private Animator animator;
 	private int food;
@@ -17,6 +19,8 @@ public class Player : MovingObject {
 		animator = GetComponent<Animator> ();
 		gameManager = Camera.main.GetComponent<Loader> ().gameManager;
 		food = gameManager.playerFoodPoints;
+		foodText.text = "Food: " + food;
+//		Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
 		base.Start ();
 	}
 
@@ -38,6 +42,7 @@ public class Player : MovingObject {
 			food += pointsPerSoda;
 			other.gameObject.SetActive (false);
 		}
+		foodText.text = "Food: " + food;
 
 	}
 
@@ -48,8 +53,10 @@ public class Player : MovingObject {
 	}
 	protected override void AttemptMove <T> (int xDir, int yDir) {
 		food--;
+		foodText.text = "Food: " + food;
 //		RaycastHit2D hit;
 		base.AttemptMove <T> (xDir, yDir);
+
 		CheckIfGameOver ();
 		GameManager.instance.playersTurn = false;
 	}
@@ -64,7 +71,6 @@ public class Player : MovingObject {
 
 		horizontal = (int)Input.GetAxisRaw ("Horizontal");
 		vertical = (int)Input.GetAxisRaw ("Vertical");
-		Debug.Log (horizontal);
 		// Stop diagonal movement
 		if (horizontal != 0) {
 			vertical = 0;
@@ -88,6 +94,7 @@ public class Player : MovingObject {
 	public void LoseFood(int loss) {
 		animator.SetTrigger("playerHit");
 		food -= loss;
+		foodText.text = "Food: " + food;
 		CheckIfGameOver ();
 	}
 }
