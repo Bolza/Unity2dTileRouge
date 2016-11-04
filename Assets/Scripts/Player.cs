@@ -18,6 +18,7 @@ public class Player : MovingObject {
 	public AudioClip drinkSound2;
 	public AudioClip gameOverSound1;
 
+	private bool facingRight = true;
 	private Animator animator;
 	private int food;
 	private GameManager gameManager;
@@ -33,7 +34,7 @@ public class Player : MovingObject {
 	}
 
 	private void OnDisable() {
-//		gameManager.instance.playerFoodPoints = food;
+		gameManager.playerFoodPoints = food;
 	}
 
 	// XXX more efficient here or in the actual trigger?
@@ -64,13 +65,13 @@ public class Player : MovingObject {
 		}
 	}
 	protected override void AttemptMove <T> (int xDir, int yDir) {
-		food--;
-		foodText.text = "Food: " + food;
 		base.AttemptMove <T> (xDir, yDir);
 		RaycastHit2D hit;
 		if (Move (xDir, yDir, out hit)) {
+			food--;
 			SoundManager.instance.RandomizeSfx (moveSound1, moveSound2);
 		}
+		foodText.text = "Food: " + food;
 		CheckIfGameOver ();
 		GameManager.instance.playersTurn = false;
 	}
@@ -85,6 +86,18 @@ public class Player : MovingObject {
 
 		horizontal = (int)Input.GetAxisRaw ("Horizontal");
 		vertical = (int)Input.GetAxisRaw ("Vertical");
+
+		if (horizontal > 0)
+			facingRight = true;
+		else if (horizontal < 0) {
+			facingRight = false;
+		}
+		Vector3 scale = transform.localScale;
+		if (facingRight != scale.x > 0) {
+			scale.x *= -1;
+			transform.localScale = scale;
+		}
+
 		// Stop diagonal movement
 		if (horizontal != 0) {
 			vertical = 0;

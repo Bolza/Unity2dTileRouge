@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	public int playerFoodPoints = 100;
 	public float turnDelay = .1f;
 	public float levelStartDelay = 2f;
+	public bool turnBased = true;
 
 	[HideInInspector] public bool playersTurn = true;
 
@@ -16,7 +17,7 @@ public class GameManager : MonoBehaviour {
 
 	private Text levelText;
 	private GameObject levelImage;
-	private int level = 1;
+	private int level = 10;
 	private List<Enemy> enemies;
 	private bool enemiesMoving;
 	private bool doingSetup;
@@ -76,7 +77,8 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (playersTurn || enemiesMoving || doingSetup)
+		bool turnOn = turnBased && (playersTurn || enemiesMoving);
+		if (turnOn || doingSetup)
 			return;
 		
 		StartCoroutine (MoveEnemies ());

@@ -5,6 +5,8 @@ public abstract class MovingObject : MonoBehaviour {
 	public float moveTime = 0.1f;
 	public LayerMask blockingLayer;
 
+	protected bool isMoving;
+
 	private BoxCollider2D boxCollider;
 	private Rigidbody2D rb2d;
 	private float inverseMoveTime;
@@ -24,8 +26,7 @@ public abstract class MovingObject : MonoBehaviour {
 		while (sqrRemainingDistance > float.Epsilon) {
 			Vector3 newPos = Vector3.MoveTowards (rb2d.position, end, inverseMoveTime * Time.deltaTime);
 			// XXX any better way to move the object?
-			//rb2d.MovePosition (newPos);
-			transform.position = newPos;
+			rb2d.MovePosition (newPos);
 			// remaining distance
 			sqrRemainingDistance = (transform.position - end).sqrMagnitude;
 			// wait a frame before continuing the loop
@@ -47,6 +48,7 @@ public abstract class MovingObject : MonoBehaviour {
 		boxCollider.enabled = true;
 
 		if (hit.transform == null) {
+			transform.position = end;
 			StartCoroutine(SmoothMovement(end));
 			return true;
 		}

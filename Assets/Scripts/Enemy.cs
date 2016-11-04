@@ -50,7 +50,7 @@ public class Enemy : MovingObject {
 
 	protected override void OnCantMove <T> (T component) {
 		Player hitPlayer = component as Player;
-		animator.SetTrigger ("EnemyAttack");
+		animator.SetTrigger ("enemyAttack");
 		SoundManager.instance.RandomizeSfx (attackSound1, attackSound2);
 		hitPlayer.LoseFood(playerDamage);
 	}
